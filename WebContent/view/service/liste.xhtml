@@ -1,0 +1,144 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html" >
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Gestion des services</title>
+		<link rel="stylesheet" type="text/css" href="./public/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="./public/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../public/css/bootstrap.min.css" />
+					
+	</h:head>
+	<h:body>
+		
+		<div class="navbar navbar-default">
+			<ul class="nav navbar-nav">
+				<li>
+					<a>
+						<h:form>
+					        <h:commandLink action="#{serveurbean.getAllServeurs}">
+					            <h:outputText value="Liste des serveurs"/>
+					        </h:commandLink>
+				        </h:form>
+			        </a>	
+				</li>
+				<li>
+					<a>
+						<h:form>
+					        <h:commandLink action="#{servicebean.getAllService}">
+					            <h:outputText value="Liste des services"/>
+					        </h:commandLink>
+				        </h:form>
+			        </a>	
+				</li>
+			</ul>
+		</div>
+		<div class="container col-md-10">
+			<h:form>
+				<div class="form-group">
+					<div class="form-group row">
+						<div class="col-md-10 col-sm-6 col-lg-10 col-xs-7">
+							<h:selectOneMenu class="col-md-10 form-control" id="Charger" value="#{servicebean.id}">
+								<f:selectItems value="#{servicebean.services}" var="s" itemValue="#{s.idS}" itemLabel="#{s.nomS}"></f:selectItems>
+							</h:selectOneMenu>
+						</div>
+						<h:commandButton action="#{servicebean.editService}" class="col-md-2 col-sm-2 col-lg-2 col-xs-4 btn btn-primary" id="vCharger" value="Charger"/>
+					
+					</div>
+				</div>
+			</h:form>
+		</div>
+			<div class="container col-lg-8 col-md-8 col-sm-12 col-xs-12">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Liste des services</div>
+						<div class="panel-body">
+						<h:form>   
+					        <h:dataTable value="#{servicebean.services}" var="service" class="table">
+					            <h:column>
+					                <f:facet name="header">
+					              		<h:outputText value="Identifiant"/>
+					              	</f:facet>
+					                <h:outputText value="#{service.idS}"/>
+					            </h:column>
+					            <h:column>  
+					                 <f:facet name="header">
+					                <h:outputText value="Nom"/>
+					                </f:facet>
+					                <h:outputText value="#{service.nomS}"/>
+					            </h:column>
+					            <h:column>  
+					                 <f:facet name="header">
+					                <h:outputText value="Numéro de port"/>
+					                </f:facet>
+					                <h:outputText value="#{service.port}"/>
+					            </h:column>
+					            <h:column>  
+					                 <f:facet name="header">
+					                <h:outputText value="Identifiant serveur"/>
+					                </f:facet>
+					                <h:outputText value="#{service.serveur.idServ}"/>
+					            </h:column>
+					            <h:column>
+					                <f:facet name="header">
+					                    <h:outputText  value="Action"/>
+					                </f:facet>
+					                
+					                <h:commandButton action="#{servicebean.removeService}" value="Supprimer" >
+					                    <!--h:outputText value="Supprimer"/-->
+					                    <f:setPropertyActionListener target="#{servicebean.id}" value="#{service.idS}"/>
+					                </h:commandButton>
+					               
+					            </h:column>
+					            <h:column>
+					                 <f:facet name="header">
+					                     <h:outputText  value="Action"/>
+					                 </f:facet>
+					                 <h:commandButton  action="#{servicebean.editService}" value="Editer" >
+					                     <!-- h:outputText value="Editer"/-->
+					                  <f:setPropertyActionListener target="#{servicebean.id}" value="#{service.idS}"/>
+					                 </h:commandButton>
+					            </h:column>
+					        </h:dataTable>            
+					    </h:form>
+							
+						</div>
+				</div>
+			</div>
+			<div class="container col-lg-4 col-md-4 col-sm-12 col-xs-12">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Formulaire de gestion des services</div>
+						<div class="panel-body">
+						<h:form >
+						    <div class="form-group">
+								<label class="control-label" for="nomS">Identifiant du service</label>
+								<h:inputText class="form-control" id="id" readonly="true" value="#{servicebean.service.idS}" />
+							</div>
+						  
+							<div class="form-group">
+								<label class="control-label" for="nomS">Nom du service</label>
+								<h:inputText class="form-control" id="nomS" placeholder="Nom ici" value="#{servicebean.service.nomS}" />
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="port">Numéro de port du service</label>
+								<h:inputText class="form-control" id="port" placeholder="Port ici" value="#{servicebean.service.port}" />
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="serveur">Selection du serveur</label>
+								<h:selectOneMenu class="col-md-10 form-control" id="Charger" value="#{servicebean.service.serveur.idServ}">
+									<f:selectItems value="#{serveurbean.serveurs}" var="s" itemValue="#{s.idServ}" itemLabel="#{s.nomServ}"></f:selectItems>
+								</h:selectOneMenu>
+							</div>	
+							<div class="form-group">
+								<h:commandButton action="#{servicebean.addService}" class="btn btn-success" id="valider" styleClass="btn btn-success #{(servicebean.bvalider==null)?'hide':''}" value= "#{servicebean.bvalider}" />
+								<h:commandButton action="#{servicebean.resetService}" class="btn btn-danger" id="annuler" styleClass="btn btn-warning #{(servicebean.bannuler==null)?'hide':''}" value="#{servicebean.bannuler}" />
+								<h:commandButton action="#{servicebean.updateService}" class="btn btn-primary" id="modifier" styleClass="btn btn-primary #{(servicebean.bmodifier==null)?'hide':''}" value= "#{servicebean.bmodifier}" />
+								<h:commandButton action="#{servicebean.removeService}" class="btn btn-danger" id="supprimer" styleClass="btn btn-danger #{(servicebean.bsupprimer==null)?'hide':''}" value="#{servicebean.bsupprimer}" />
+							</div>
+						</h:form>
+					</div>
+					</div>
+			</div>
+	
+	</h:body>
+</html>

@@ -1,0 +1,171 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>Gestion des serveurs</title>
+		<link rel="stylesheet" type="text/css" href="./public/css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../public/css/bootstrap.min.css"/>
+		<script src="./public/js/jquery.js"></script>
+		<script src="./public/js/jquery-ui.js"></script>
+		<script src="../../public/js/jquery.js"></script>
+		<script src="../../public/js/jquery-ui.js"></script>
+		<script>
+			$(document).ready(function(){
+				//alert($("#form1:#valider").val());
+				$("#modifier").hide();
+				$("#supprimer").hide();
+				
+			});
+		</script>
+		<script>
+			function cacher() {
+				document.getElementById("form1:valider").style.visibility = "visible";
+				document.getElementById("form1:annuler").style.visibility = "visible";
+				document.getElementById("form1:modifier").style.visibility = "hidden";
+				document.getElementById("form1:supprimer").style.visibility = "hidden";
+			}
+			function afficher() {
+				document.getElementById("form1:valider").style.visibility = "hidden";
+				document.getElementById("form1:annuler").style.visibility = "hidden";
+				document.getElementById("form1:modifier").style.visibility = "visible";
+				document.getElementById("form1:supprimer").style.visibility = "visible";
+			}
+		</script>
+	</h:head>
+	<h:body>
+		
+		 <div class="navbar navbar-default">
+			<ul class="nav navbar-nav">
+				<li>
+					<a>
+						<h:form>
+					        <h:commandLink action="#{serveurbean.getAllServeurs}">
+					            <h:outputText value="Liste des serveurs"/>
+					        </h:commandLink>
+				        </h:form>
+			        </a>	
+				</li>
+				<li>
+					<a>
+						<h:form>
+					        <h:commandLink action="#{servicebean.getAllServices}">
+					            <h:outputText value="Liste des services"/>
+					        </h:commandLink>
+				        </h:form>
+			        </a>	
+				</li>
+			</ul>
+		</div>
+		
+		<div class="container col-md-10">
+			<h:form>
+			<div class="form-group">
+		    	<div class="form-group row">
+			    	<div class="col-md-10 col-sm-6 col-lg-10 col-xs-7">
+				      	<h:selectOneMenu class="col-md-10 form-control" id="charger" value="#{serveurbean.id}">
+				      		<f:selectItems value="#{serveurbean.serveurs}" var="s"  itemValue="#{s.idServ}" itemLabel="#{s.nomServ}"/>
+				      	</h:selectOneMenu>
+			    	</div>
+			    	<h:commandButton class="col-md-2 col-sm-2 col-lg-2 col-xs-4 btn btn-primary" action="#{serveurbean.detailsServeur}" id="vcharger" value="Charger"/>
+		  		</div>
+		  	</div>
+		  	</h:form>
+		</div>
+		
+		<div class="container col-md-8">
+			<div class="panel panel-primary">
+				<div class="panel-heading">Liste des serveurs</div>
+				<div class="panel-body">
+					<h:form  id="form">   
+				        <h:dataTable id="dataTable" value="#{serveurbean.serveurs}" var="serveur" class="table">
+				            
+				            <h:column id="idServ">
+				                <f:facet name="header">
+				              		<h:outputText value="Identifiant"/>
+				              	</f:facet>
+				                <h:outputText value="#{serveur.idServ}"/>
+				            </h:column>
+				            <h:column id="nomServ">  
+				                 <f:facet name="header">
+				                <h:outputText value="Nom du serveur"/>
+				                </f:facet>
+				                <h:outputText value="#{serveur.nomServ}"/>
+				            </h:column>
+				            <h:column id="adripServ">  
+				                 <f:facet name="header">
+				                <h:outputText value="Adresse ip du serveur"/>
+				                </f:facet>
+				                <h:outputText value="#{serveur.adripServ}"/>
+				            </h:column>
+				            <h:column id="salleServ">  
+				                 <f:facet name="header">
+				                <h:outputText value="Salle du serveur"/>
+				                </f:facet>
+				                <h:outputText value="#{serveur.salleServ}"/>
+				            </h:column>
+				            <h:column>
+				                <f:facet name="header">
+				                    <h:outputText  value="Action"/>
+				                </f:facet>
+				                <h:commandLink action="#{serveurbean.removeServeur}" onclick="if(!confirm('Voulez-vous Supprimer')) return false;">
+				                    <h:outputText value="Supprimer"/>
+				                    <f:setPropertyActionListener target="#{serveurbean.id}" value="#{serveur.idServ}"/>
+				                </h:commandLink>
+				            </h:column>
+				            <h:column>
+				                 <f:facet name="header">
+				                     <h:outputText  value="Action"/>
+				                 </f:facet>
+				                  
+				                 <h:commandLink action="#{serveurbean.detailsServeur}" id="editer" update=":form:dataTable,idServ,nomServ,adripServ,salleServ" process="@this,idServ,nomServ,adripServ,salleServ">
+				                     <h:outputText value="Editer"/>
+				                  <f:setPropertyActionListener target="#{serveurbean.id}" value="#{serveur.idServ}"/>
+				                 </h:commandLink>
+				                 
+				             </h:column>
+				        </h:dataTable>  
+				        <p:commandButton value="Export as PDF" ajax="false" >
+                               <p:dataExporter type="pdf" target="dataTable" fileName="serveurs" />
+                       </p:commandButton>          
+				    </h:form>
+				</div>
+			</div>
+		</div>
+		<div class="container col-md-4 col-lg-4 col-sm-12 col-xs-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading">Formulaire de gestion des serveurs</div>
+				<div class="panel-body">
+					<h:form id="form1">
+						
+							<div class="form-group">
+								<label class="control-label" for="id">Identifiant du serveur</label>
+								<h:inputText class="form-control" id="id" readonly="true" value="#{serveurbean.serveur.idServ }" />
+							</div>
+						
+						<div class="form-group">
+							<label class="control-label" for="nomServ">Nom du serveur</label>
+							<h:inputText class="form-control" id="nomServ" placeholder="Nom ici" value="#{serveurbean.serveur.nomServ }" />
+						</div>
+						<div  class="form-group">
+							<label class="control-label" for="adripServ">Adresse ip du serveur</label>
+							<h:inputText class="form-control" id="adripServ" placeholder="adresse ip ici" value="#{serveurbean.serveur.adripServ }" />
+						</div>
+						<div  class="form-group">
+							<label class="control-label" for="salleServ">Salle du serveur</label>
+							<h:inputText class="form-control" id="salleServ" placeholder="Salle ici" value="#{serveurbean.serveur.salleServ }" />
+						</div>
+						<div  class="form-group">
+							<h:commandButton action="#{serveurbean.addServeur}" class="btn btn-success" id="valider" styleClass="btn btn-success #{(serveurbean.bvalider==null)?'hide':''}" value="#{serveurbean.bvalider}" />
+							<h:commandButton action="#{serveurbean.resetServeur}" class="btn btn-warning" id="annuler" styleClass="btn btn-warning #{(serveurbean.bannuler==null)?'hide':''}" value="#{serveurbean.bannuler}" />
+							<h:commandButton action="#{serveurbean.updateServeur}" class="btn btn-primary" id="modifier" styleClass="btn btn-primary #{(serveurbean.bmodifier==null)?'hide':''}" value="#{serveurbean.bmodifier}" />
+							<h:commandButton action="#{serveurbean.removeServeur}" class="btn btn-danger" id="supprimer" styleClass="btn btn-danger #{(serveurbean.bsupprimer==null)?'hide':''}" value="#{serveurbean.bsupprimer}" />
+						</div>
+					</h:form>
+				</div>
+			</div>
+		</div>
+	</h:body>
+</html>

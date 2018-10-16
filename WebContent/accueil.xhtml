@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"> 
+	<h:head>
+		<link rel="stylesheet" href="./public/css/bootstrap.min.css" />
+	</h:head>
+	<f:view>
+        <div class="navbar navbar-default">
+			<ul class="nav navbar-nav">
+				<li>
+					<a>
+						<h:form>
+					        <h:commandLink action="#{serveurbean.getAllServeurs}">
+					            <h:outputText value="Liste des serveurs"/>
+					        </h:commandLink>
+				        </h:form>
+			        </a>	
+				</li>
+				<li>
+					<a>
+						<h:form>
+					        <h:commandLink action="#{servicebean.getAllServices}">
+					            <h:outputText value="Liste des services"/>
+					        </h:commandLink>
+				        </h:form>
+			        </a>	
+				</li>
+				<li>
+					<a>
+						<h:form>
+					        <h:commandLink action="#{userbean.getAllUsers}">
+					            <h:outputText value="Liste des utilisateurs"/>
+					        </h:commandLink>
+				        </h:form>
+			        </a>	
+				</li>
+			</ul>
+		</div>
+	</f:view>
+</html>

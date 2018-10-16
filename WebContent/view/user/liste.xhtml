@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>SECK PrimeFaces</title>
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true">
+	
+                <p:layoutUnit position="north" size="100">
+                        <center><big> Gestion des utilisateurs </big></center><br/>
+                </p:layoutUnit>
+           		<p:layoutUnit position="west" size="200" rendered="true" resizable="true" closable="true" collapsible="true" header="Menu">
+                        <h:form>
+                            <p:commandLink value="Nouveau utilisateur" onclick="dlgUser.show()" />
+                        </h:form>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <p:dialog widgetVar="dlgUser" resizable="false" header="Ajout Utilisateur" width="450">
+                          <h:form>    
+                              <p:panelGrid columns="2">
+                                  <h:outputText value="Nom" />
+                                  <p:inputText required="true" requiredMessage="Nom obligatoire!!!!" id="nom" value="#{userbean.user.nom}" />
+								
+								  <h:outputText value="Prénom" />
+                                  <p:inputText required="true" requiredMessage="prénom obligatoire!!!!" id="prenom" value="#{userbean.user.nom}" />
+								
+                                  <h:outputText value="Email" />
+                                  <p:inputText required="true" requiredMessage="email obligatoire!!!!" id="email" value="#{userbean.user.email}" />
+
+                                  <h:outputText value="Mot de passe" />
+                                  <p:password required="true" requiredMessage="mot de passe obligatoire!!!!" id="password" value="#{userbean.user.password}" />
+
+								  <p:outputLabel value="Etat" />
+		                          <p:selectOneRadio id="etat" value="#{userbean.user.etat}" >
+		                             <f:selectItem itemLabel="Oui" itemValue="1" />
+		                             <f:selectItem itemLabel="Nom" itemValue="0" />
+		                          </p:selectOneRadio>
+		                          
+                                  <p:commandButton value="Enregistrer" id="add" action="#{userbean.addUser}" />
+                                
+                              </p:panelGrid>
+                          </h:form>
+                    </p:dialog>
+                     <br/><br/>
+                 <h:form id="formTable"> 
+                     <p:dataTable id="table" value="#{userbean.users}" var="user" editable="true">
+                            <p:ajax event="rowSelect" listener="#{userbean.getUtilisateurById}" oncomplete="dlgUser.show()"  process="@this"/>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="ID" />
+                                </f:facet>
+                                 <h:outputText value="#{user.id}" />
+                             </p:column>
+                             <p:column>
+                                 <f:facet name="header">
+                                    <h:outputText value="Nom" />
+                                </f:facet>
+                                 <h:outputText value="#{user.nom}" />
+                             </p:column>
+                             <p:column>
+                                 <f:facet name="header">
+                                    <h:outputText value="Email" />
+                                </f:facet>
+                                 <h:outputText value="#{user.email}" />
+                             </p:column>
+                             <p:column>
+                                 <f:facet name="header">
+                                    <h:outputText value="Mot de passe" />
+                                </f:facet>
+                                 <h:outputText value="#{user.password}" />
+                             </p:column>
+                       </p:dataTable>
+                       <br/><br/>
+                       
+                       <p:commandButton value="Export as PDF" ajax="false" >
+                               <p:dataExporter type="pdf" target="table" fileName="users" />
+                       </p:commandButton>
+                       
+                  </h:form> 
+            </p:layoutUnit>
+	
+        </p:layout>
+    </h:body>
+</html>
